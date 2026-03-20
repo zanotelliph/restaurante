@@ -12,7 +12,6 @@ class PratoController extends Controller
     {
         $query = Prato::with('categoriaPrato');
 
-        // Busca por nome, descrição ou categoria
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -41,7 +40,6 @@ class PratoController extends Controller
             'descricao' => 'nullable|string',
             'preco' => 'required|numeric|min:0',
             'categoria_prato_id' => 'required|exists:categorias_pratos,id',
-            'disponivel' => 'boolean',
             'estoque' => 'required|integer|min:0',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -76,7 +74,6 @@ class PratoController extends Controller
             'descricao' => 'nullable|string',
             'preco' => 'required|numeric|min:0',
             'categoria_prato_id' => 'required|exists:categorias_pratos,id',
-            'disponivel' => 'boolean',
             'estoque' => 'required|integer|min:0',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

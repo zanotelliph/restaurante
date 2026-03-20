@@ -59,14 +59,7 @@
                         <p class="card-text">
                             <small><strong>Tipo:</strong> {{ $bebida->categoriaBebida?->nome ?? 'N/A' }}</small><br>
                             <small><strong>Preço:</strong> R$ {{ number_format($bebida->preco, 2, ',', '.') }}</small><br>
-                            <small><strong>Estoque:</strong> {{ $bebida->estoque }} unidades</small><br>
-                            <small><strong>Status:</strong> 
-                                @if($bebida->disponivel)
-                                    <span class="badge bg-success">Disponível</span>
-                                @else
-                                    <span class="badge bg-danger">Indisponível</span>
-                                @endif
-                            </small>
+                            <small><strong>Estoque:</strong> {{ $bebida->estoque }} unidades</small>
                         </p>
                         @if($bebida->descricao)
                             <p class="card-text"><small class="text-muted">{{ Str::limit($bebida->descricao, 80) }}</small></p>

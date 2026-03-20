@@ -12,7 +12,6 @@ class BebidaController extends Controller
     {
         $query = Bebida::with('categoriaBebida');
 
-        // Busca por nome, descrição ou categoria
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -41,7 +40,6 @@ class BebidaController extends Controller
             'descricao' => 'nullable|string',
             'preco' => 'required|numeric|min:0',
             'categoria_bebida_id' => 'required|exists:categorias_bebidas,id',
-            'disponivel' => 'boolean',
             'estoque' => 'required|integer|min:0',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -76,7 +74,6 @@ class BebidaController extends Controller
             'descricao' => 'nullable|string',
             'preco' => 'required|numeric|min:0',
             'categoria_bebida_id' => 'required|exists:categorias_bebidas,id',
-            'disponivel' => 'boolean',
             'estoque' => 'required|integer|min:0',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

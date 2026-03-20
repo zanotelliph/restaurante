@@ -59,14 +59,7 @@
                         <p class="card-text">
                             <small><strong>Categoria:</strong> {{ $prato->categoriaPrato?->nome ?? 'N/A' }}</small><br>
                             <small><strong>Preço:</strong> R$ {{ number_format($prato->preco, 2, ',', '.') }}</small><br>
-                            <small><strong>Estoque:</strong> {{ $prato->estoque }} unidades</small><br>
-                            <small><strong>Status:</strong> 
-                                @if($prato->disponivel)
-                                    <span class="badge bg-success">Disponível</span>
-                                @else
-                                    <span class="badge bg-danger">Indisponível</span>
-                                @endif
-                            </small>
+                            <small><strong>Estoque:</strong> {{ $prato->estoque }} unidades</small>
                         </p>
                         @if($prato->descricao)
                             <p class="card-text"><small class="text-muted">{{ Str::limit($prato->descricao, 80) }}</small></p>

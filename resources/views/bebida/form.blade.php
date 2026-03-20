@@ -67,12 +67,6 @@
                     <img id="preview" class="img-preview d-none" style="display: none;">
                 </div>
 
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="disponivel" name="disponivel" value="1"
-                        {{ old('disponivel', $bebida->disponivel ?? true) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="disponivel">Disponível</label>
-                </div>
-
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">{{ isset($bebida) ? 'Atualizar' : 'Criar' }}</button>
                     <a href="{{ route('bebida.index') }}" class="btn btn-secondary">Cancelar</a>
