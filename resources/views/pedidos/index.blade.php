@@ -2,31 +2,36 @@
 
 @section('conteudo')
 
-<h2 class="mb-4">Novo Pedido</h2>
+<h2 class="mb-4 text-2xl font-bold text-gray-700">
+👤 Pedidos
+</h2>
 
-<form action="/pedidos" method="POST">
+<table class="table table-hover table-striped">
 
-@csrf
+<thead class="table-dark">
+<tr>
+<th>ID</th>
+<th>Nome</th>
+<th>Telefone</th>
+<th>Email</th>
+</tr>
+</thead>
 
-<div class="mb-3">
-<label>Nome</label>
-<input type="text" name="nome" class="form-control">
-</div>
+<tbody>
 
-<div class="mb-3">
-<label>Email</label>
-<input type="email" name="email" class="form-control">
-</div>
+@foreach($pedidos as $pedido)
 
-<div class="mb-3">
-<label>Telefone</label>
-<input type="text" name="telefone" class="form-control">
-</div>
+<tr>
+<td>{{ $pedido->id }}</td>
+<td class="fw-semibold">{{ $pedido->nome }}</td>
+<td>{{ $pedido->telefone }}</td>
+<td>{{ $pedido->email }}</td>
+</tr>
 
-<button class="btn btn-success">
-Adicionar Pedido
-</button>
+@endforeach
 
-</form>
+</tbody>
+
+</table>
 
 @endsection

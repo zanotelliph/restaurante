@@ -11,8 +11,6 @@ Route::get('/', function () {
 
 Route::get('/pratos', [PratoController::class, 'index']);
 
-
 Route::get('/clientes', [ClienteController::class, 'index']);
 
-
-Route::get('/pedidos', [PedidoController::class, 'index']);
+Route::resource('pedidos', PedidoController::class);
