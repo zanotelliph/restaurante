@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +19,11 @@ class ClienteFactory extends Factory
     {
         return [
             'nome' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'telefone' => fake()->phoneNumber(),
-            'email' => fake()->safeEmail(),
+            'cpf' => fake()->numerify('###.###.###-##'),
+            'endereco' => fake()->address(),
+            'imagem' => null,
         ];
     }
 }

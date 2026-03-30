@@ -2,18 +2,27 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Pedido;
 use App\Models\Cliente;
-use App\Models\Prato;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pedido>
+ */
 class PedidoFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
-            'cliente_id' => Cliente::inRandomOrder()->first()->id,
-            'prato_id' => Prato::inRandomOrder()->first()->id,
-            'quantidade' => fake()->numberBetween(1, 5),
+            'cliente_id' => Cliente::inRandomOrder()->first()->id ?? 1,
+            'total' => 0, // Will be calculated later
+            'status' => fake()->randomElement(['pendente', 'preparando', 'pronto', 'entregue']),
+            'observacoes' => fake()->optional()->sentence(),
         ];
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Prato;
+use App\Models\Bebida;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PratoSeeder extends Seeder
+class BebidaSeeder extends Seeder
 {
     use WithoutModelEvents;
 
@@ -15,6 +15,6 @@ class PratoSeeder extends Seeder
      */
     public function run(): void
     {
-        Prato::factory(10)->create();
+        Bebida::factory(10)->create();
     }
 }

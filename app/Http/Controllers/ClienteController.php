@@ -1,71 +1,106 @@
-<?php // Este código é um controlador Laravel para gerenciar clientes. 
-// Ele inclui métodos para listar, criar, editar, atualizar, excluir e 
-// pesquisar clientes. 
-// O controlador utiliza o modelo Cliente para interagir 
-// com o banco de dados e retorna as views correspondentes para cada ação.
-namespace App\Http\Controllers;// Importa as classes necessárias para o controlador
+<?php
 
-use Illuminate\Http\Request;// Importa a classe Request para lidar com as requisições HTTP
-use App\Models\Cliente;// Importa o modelo Cliente para interagir com a tabela de clientes no banco de dados
+namespace App\Http\Controllers;
 
-class ClienteController extends Controller// Define a classe C
-// lienteController que é uma extensão da classe base Controller
+use App\Models\Cliente;
+use Illuminate\Http\Request;
+
+class ClienteController extends Controller
 {
-    public function index() // Método 2 para listar todos os clientes
+    public function index(Request $request)
     {
-        $clientes = Cliente::all(); // Recupera todos os clientes do banco de dados
-        return view('clientes.index', compact('clientes')); 
+        $query = Cliente::query();
+//filtros para fazer pesquisa 
+      
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nome', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('cpf', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $clientes = $query->paginate(12);//pagina entre
+        return view('cliente.list', compact('clientes'));
     }
 
-    public function create() //Crud 1 - Método para exibir o formulário de criação de um novo cliente
+    public function create()
     {
-    return view('clientes.form'); // Abre o formulário para criar um novo cliente
+        return view('cliente.form');
     }
 
-    public function store(Request $request) // Crud 3 - Método para salvar um novo cliente no banco de dados
-    {
-         $request->validate([  
-            'nome' => 'required', 
-            'email' => 'required',
-            'telefone' => 'required',
-        ]);
-
-        Cliente::create($request->all()); // Cria um novo cliente com os dados fornecidos na requisição
-
-        return redirect('cliente'); 
-    }
-
-    public function edit($id)// Crud 3 - Método para exibir o formulário de edição de um cliente existente
-    {
-        $cliente = Cliente::find($id); // Encontra o cliente pelo ID fornecido
-        return view('clientes.form', compact('cliente')); // Abre o formulário para
-        //  editar o cliente encontrado, 
-        // passando os dados do cliente para a view
-    }
-
-    public function update(Request $request, $id) 
+    public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required',
-            'email' => 'required',
-            'telefone' => 'required',
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:clientes',
+            'telefone' => 'nullable|string',
+            'cpf' => 'required|unique:clientes|string',
+            'endereco' => 'nullable|string',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        Cliente::find($id)->update($request->all());
+        $data = $request->all();
 
-        return redirect('cliente');
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_cliente_' . uniqid() . '.' . $imagem->getClientOriginalExtension();//gera nome unico
+            $imagem->move(public_path('uploads/clientes'), $nomeImagem);
+            $data['imagem'] = 'uploads/clientes/' . $nomeImagem;
+        }
+
+        Cliente::create($data);
+
+        return redirect()->route('cliente.index')->with('success', 'Cliente criado com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        return view('cliente.form', compact('cliente'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cliente = Cliente::findOrFail($id);
+
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:clientes,email,' . $id,
+            'telefone' => 'nullable|string',
+            'cpf' => 'required|unique:clientes,cpf,' . $id,
+            'endereco' => 'nullable|string',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('imagem')) {
+            if ($cliente->imagem && file_exists(public_path($cliente->imagem))) {
+                unlink(public_path($cliente->imagem));
+            }
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_cliente_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
+            $imagem->move(public_path('uploads/clientes'), $nomeImagem);
+            $data['imagem'] = 'uploads/clientes/' . $nomeImagem;
+        }
+
+        $cliente->update($data);
+
+        return redirect()->route('cliente.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
-        Cliente::destroy($id);
-        return redirect('cliente');
-    }
+        $cliente = Cliente::findOrFail($id);
+        
+        if ($cliente->imagem && file_exists(public_path($cliente->imagem))) {
+            unlink(public_path($cliente->imagem));
+        }
+        
+        $cliente->delete();
 
-    public function search(Request $request)
-    {
-        $clientes = Cliente::where('nome', 'like', '%' . $request->valor . '%')->get();
-
-        return view('clientes.index', compact('clientes'));
+        return redirect()->route('cliente.index')->with('success', 'Cliente deletado com sucesso!');
     }
 }
