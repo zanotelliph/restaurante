@@ -18,33 +18,54 @@ class BebidaFactory extends Factory
      */
     public function definition(): array
     {
-        $nomes = [
-            'Coca-Cola',
-            'Suco de Laranja',
-            'Café Expresso',
-            'Chá Verde',
-            'Vinho Tinto',
-            'Cerveja Brahma',
-            'Caipirinha',
-            'Água Mineral',
-            'Refrigerante Guaraná',
-            'Suco de Uva',
+        $bebidasBrasileiras = [
+            // Cervejas Brasileiras
+            ['nome' => 'Cerveja Brahma', 'descricao' => 'Cerveja clássica e refrescante'],
+            ['nome' => 'Cerveja Skol', 'descricao' => 'Cerveja gelada e leve'],
+            ['nome' => 'Cerveja Itaipava', 'descricao' => 'Cerveja artesanal brasileira'],
+            ['nome' => 'Cerveja Antártica', 'descricao' => 'Cerveja com sabor único'],
+            
+            // Refrigerantes Brasileiros
+            ['nome' => 'Guaraná Antártica', 'descricao' => 'Refrigerante com sabor único do Brasil'],
+            ['nome' => 'Guaraná Jesus', 'descricao' => 'Guaraná tradicional e delicioso'],
+            ['nome' => 'Refrigerante Cola', 'descricao' => 'Clássico refrigerante gelado'],
+            ['nome' => 'Refrigerante Fanta', 'descricao' => 'Refrigerante colorido e doce'],
+            
+            // Sucos Naturais Brasileiros
+            ['nome' => 'Suco de Laranja Fresco', 'descricao' => 'Suco natural espremido na hora'],
+            ['nome' => 'Suco de Maracujá', 'descricao' => 'Suculento suco tropical'],
+            ['nome' => 'Suco de Abacaxi', 'descricao' => 'Suco tropical refrescante'],
+            ['nome' => 'Suco de Melancia', 'descricao' => 'Suco doce e hidratante'],
+            ['nome' => 'Suco de Goiaba', 'descricao' => 'Suco rosa naturalmente doce'],
+            
+            // Bebidas Quentes
+            ['nome' => 'Café Coado', 'descricao' => 'Café coado fresquinho'],
+            ['nome' => 'Café Expresso', 'descricao' => 'Café forte e encorpado'],
+            ['nome' => 'Café com Leite', 'descricao' => 'Combinação clássica do café da manhã'],
+            ['nome' => 'Chá de Camomila', 'descricao' => 'Chá morno e relaxante'],
+            ['nome' => 'Chá Verde', 'descricao' => 'Chá antioxidante e saudável'],
+            
+            // Bebidas Alcoólicas Brasileiras
+            ['nome' => 'Caipirinha de Limão', 'descricao' => 'Coquetel clássico com cana'],
+            ['nome' => 'Caipirinha de Morango', 'descricao' => 'Caipirinha frutada e doce'],
+            ['nome' => 'Caipivoka', 'descricao' => 'Coquetel com vodka e frutas'],
+            ['nome' => 'Batida de Coco', 'descricao' => 'Bebida doce com leite de coco'],
+            ['nome' => 'Vinho Tinto Brasileiro', 'descricao' => 'Vinho fino de qualidade premium'],
+            
+            // Água e Bebidas Refrescantes
+            ['nome' => 'Água Mineral', 'descricao' => 'Água pura e mineral gelada'],
+            ['nome' => 'Água com Limão', 'descricao' => 'Água refrescante com limão fresco'],
+            ['nome' => 'Água de Coco Natural', 'descricao' => 'Água de coco direto do fruto'],
+            ['nome' => 'Refrigerante Água Tônica', 'descricao' => 'Bebida refrescante com quinina'],
         ];
 
-        $descricoes = [
-            'Bebida refrescante',
-            'Opção clássica',
-            'Preparada na hora',
-            'Importada',
-            'Produzida artesanalmente',
-        ];
+        $bebida = fake()->randomElement($bebidasBrasileiras);
 
         return [
-            'nome' => fake()->randomElement($nomes),
-            'descricao' => fake()->randomElement($descricoes),
-            'preco' => fake()->randomFloat(2, 2, 20),
+            'nome' => $bebida['nome'],
+            'descricao' => $bebida['descricao'],
+            'preco' => fake()->randomFloat(2, 2, 25),
             'categoria_bebida_id' => CategoriaBebida::inRandomOrder()->first()->id ?? 1,
-            'disponivel' => true,
             'imagem' => null,
             'estoque' => fake()->numberBetween(0, 100),
         ];

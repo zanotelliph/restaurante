@@ -1,6 +1,6 @@
-@extends('main')
+@extends('layout')
 
-@section('content')
+@section('conteudo')
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-12">

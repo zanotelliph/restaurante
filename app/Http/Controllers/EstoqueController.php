@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Prato;
 use App\Models\Bebida;
+use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 
 class EstoqueController extends Controller
 {
+    use DashboardData;
+
     public function index(Request $request)
     {
         $search = $request->get('search', '');
@@ -25,7 +28,7 @@ class EstoqueController extends Controller
         $categoriasPratos = \App\Models\CategoriaPrato::where('ativo', true)->get();
         $categoriasBebidas = \App\Models\CategoriaBebida::where('ativo', true)->get();
 
-        return view('estoque.index', compact('pratos', 'bebidas', 'categoriasPratos', 'categoriasBebidas', 'search'));
+        return view('estoque.index', array_merge(compact('pratos', 'bebidas', 'categoriasPratos', 'categoriasBebidas', 'search'), $this->getDashboardData()));
     }
 
     public function store(Request $request)
@@ -76,24 +79,30 @@ class EstoqueController extends Controller
 
     public function updateEstoque(Request $request)
     {
-        $request->validate([
-            'itens' => 'required|array',
-            'itens.*.tipo' => 'required|in:prato,bebida',
-            'itens.*.id' => 'required|integer',
-            'itens.*.estoque' => 'required|integer|min:0',
-        ]);
+        try {
+            $validated = $request->validate([
+                'itens' => 'nullable|array',
+                'itens.*.tipo' => 'required_with:itens|in:prato,bebida',
+                'itens.*.id' => 'required_with:itens|integer',
+                'itens.*.estoque' => 'required_with:itens|integer|min:0',
+            ]);
 
-        foreach ($request->itens as $item) {
-            if ($item['tipo'] === 'prato') {
-                $prato = Prato::findOrFail($item['id']);
-                $prato->update(['estoque' => $item['estoque']]);
-            } elseif ($item['tipo'] === 'bebida') {
-                $bebida = Bebida::findOrFail($item['id']);
-                $bebida->update(['estoque' => $item['estoque']]);
+            if (!empty($validated['itens'])) {
+                foreach ($validated['itens'] as $item) {
+                    if ($item['tipo'] === 'prato') {
+                        $prato = Prato::findOrFail($item['id']);
+                        $prato->update(['estoque' => $item['estoque']]);
+                    } elseif ($item['tipo'] === 'bebida') {
+                        $bebida = Bebida::findOrFail($item['id']);
+                        $bebida->update(['estoque' => $item['estoque']]);
+                    }
+                }
             }
-        }
 
-        return redirect()->route('estoque.index')->with('success', 'Estoque atualizado com sucesso!');
+            return redirect()->route('estoque.index')->with('success', 'Estoque atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->route('estoque.index')->with('error', 'Erro ao atualizar estoque: ' . $e->getMessage());
+        }
     }
 
     public function destroy(Request $request, $tipo, $id)

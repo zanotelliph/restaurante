@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prato;
+use App\Traits\DashboardData;
 
 class PratoController extends Controller
 {
+    use DashboardData;
+
     public function index()
     {
         $pratos = Prato::all();
 
-        return view('pratos.index', ['pratos' => $pratos]);
+        return view('pratos.index', array_merge(['pratos' => $pratos], $this->getDashboardData()));
     }
        public function create()
     {
-        return view('prato.form');
+        return view('prato.form', $this->getDashboardData());
     }
 
     public function store(Request $request)

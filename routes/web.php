@@ -33,6 +33,7 @@ Route::put('/pedido/{id}', [PedidoController::class, 'update'])->name('pedido.up
 Route::delete('/pedido/{id}', [PedidoController::class, 'destroy'])->name('pedido.destroy');
 
 Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-Route::put('/estoque', [EstoqueController::class, 'updateEstoque'])->name('estoque.update');
-Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
 Route::delete('/estoque/{tipo}/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
+Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
+Route::put('/estoque', [EstoqueController::class, 'updateEstoque'])->name('estoque.update');
+Route::patch('/estoque', [EstoqueController::class, 'updateEstoque']);

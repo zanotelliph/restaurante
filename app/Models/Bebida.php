@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Pedido;
+use App\Models\CategoriaBebida;
 
-class Prato extends Model
+class Bebida extends Model
 {
     use HasFactory;
 
@@ -16,16 +17,16 @@ class Prato extends Model
         'descricao',
         'estoque',
         'imagem',
-        'categoria_prato_id'
+        'categoria_bebida_id'
     ];
-
-    public function categoriaPrato()
-    {
-        return $this->belongsTo(CategoriaPrato::class, 'categoria_prato_id');
-    }
 
     public function pedidos()
     {
         return $this->hasMany(Pedido::class);
+    }
+
+    public function categoriaBebida()
+    {
+        return $this->belongsTo(CategoriaBebida::class, 'categoria_bebida_id');
     }
 }

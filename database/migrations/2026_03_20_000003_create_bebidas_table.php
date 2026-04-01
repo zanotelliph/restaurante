@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clientes', function (Blueprint $table) {
+        Schema::create('bebidas', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('email')->unique();
-            $table->string('telefone');
-            $table->string('cpf')->unique()->nullable();
-            $table->string('endereco')->nullable();
+            $table->decimal('preco', 8, 2);
+            $table->text('descricao')->nullable();
+            $table->integer('estoque')->default(0);
             $table->string('imagem')->nullable();
+            $table->unsignedBigInteger('categoria_bebida_id')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clientes');
+        Schema::dropIfExists('bebidas');
     }
 };

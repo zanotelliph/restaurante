@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
+    use DashboardData;
+
     public function index(Request $request)
     {
         $query = Cliente::query();
@@ -22,12 +25,12 @@ class ClienteController extends Controller
         }
 
         $clientes = $query->paginate(12);//pagina entre
-        return view('cliente.list', compact('clientes'));
+        return view('clientes.index', array_merge(compact('clientes'), $this->getDashboardData()));
     }
 
     public function create()
     {
-        return view('cliente.form');
+        return view('cliente.form', $this->getDashboardData());
     }
 
     public function store(Request $request)

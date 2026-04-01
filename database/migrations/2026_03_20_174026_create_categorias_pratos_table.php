@@ -11,24 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('pedidos', function (Blueprint $table) {
-    $table->id();
-
-    $table->foreignId('cliente_id')->constrained()->onDelete('cascade');
-    $table->foreignId('prato_id')->constrained()->onDelete('cascade');
-
-    $table->integer('quantidade');
-
-    $table->timestamps();
-});
+        Schema::create('categorias_pratos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome');
+            $table->text('descricao')->nullable();
+            $table->boolean('ativo')->default(true);
+            $table->timestamps();
+        });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('pedidos');
+        Schema::dropIfExists('categorias_pratos');
     }
 };

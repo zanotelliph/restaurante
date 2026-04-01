@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clientes', function (Blueprint $table) {
+        Schema::create('categorias_bebidas', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('email')->unique();
-            $table->string('telefone');
-            $table->string('cpf')->unique()->nullable();
-            $table->string('endereco')->nullable();
-            $table->string('imagem')->nullable();
+            $table->text('descricao')->nullable();
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clientes');
+        Schema::dropIfExists('categorias_bebidas');
     }
 };

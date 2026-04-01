@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('pratos', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->decimal('preco',8,2);
+            $table->decimal('preco', 8, 2);
             $table->text('descricao')->nullable();
+            $table->integer('estoque')->default(0);
+            $table->string('imagem')->nullable();
+            $table->unsignedBigInteger('categoria_prato_id')->nullable();
             $table->timestamps();
         });
     }

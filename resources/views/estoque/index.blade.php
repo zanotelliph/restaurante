@@ -1,7 +1,7 @@
-@extends('main')
+@extends('layout')
 
-@section('content')
-<div class="container mt-5">
+@section('conteudo')
+<div class="mt-5">
     <div class="row mb-4">
         <div class="col-md-8">
             <h1>Controle de Estoque</h1>
@@ -192,6 +192,7 @@
                     <li>Itens com estoque 0 não aparecerão disponíveis nos pedidos</li>
                 </ul>
             </div>
+            <a href="{{ route('dashboard') }}" class="btn btn-secondary">← Voltar</a>
         </div>
     </div>
 
