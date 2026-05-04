@@ -11,7 +11,7 @@ class Bebida extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+    protected $fillable = [ 
         'nome',
         'preco',
         'descricao',
