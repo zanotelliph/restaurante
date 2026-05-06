@@ -1,21 +1,25 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Reserva;
 
 class Reserva extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nome',
-        'email',
-        'telefone',
+        'cliente_id',
+        'data_reserva',
+        'hora_reserva',
+        'pessoas',
+        'status',
+        'observacoes',
     ];
 
-    public function reservas()
+    public function cliente()
     {
-        return $this->hasMany(Reserva::class);
+        return $this->belongsTo(Cliente::class);
     }
 }
