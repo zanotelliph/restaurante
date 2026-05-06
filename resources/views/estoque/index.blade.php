@@ -95,12 +95,8 @@
                                                        value="{{ $prato->estoque }}" min="0" style="width: 80px;">
                                             </td>
                                             <td>
-                                                <form method="POST" action="{{ route('estoque.destroy', ['tipo' => 'prato', 'id' => $prato->id]) }}" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                            onclick="return confirm('Tem certeza que deseja deletar este prato?')">🗑️</button>
-                                                </form>
+                                                <button type="submit" form="deletePratoForm_{{ $prato->id }}" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Tem certeza que deseja deletar este prato?')">🗑️</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -162,12 +158,8 @@
                                                        value="{{ $bebida->estoque }}" min="0" style="width: 80px;">
                                             </td>
                                             <td>
-                                                <form method="POST" action="{{ route('estoque.destroy', ['tipo' => 'bebida', 'id' => $bebida->id]) }}" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                            onclick="return confirm('Tem certeza que deseja deletar esta bebida?')">🗑️</button>
-                                                </form>
+                                                <button type="submit" form="deleteBebidaForm_{{ $bebida->id }}" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Tem certeza que deseja deletar esta bebida?')">🗑️</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -179,6 +171,19 @@
             </div>
         </div>
     </form>
+
+    @foreach($pratos as $prato)
+        <form id="deletePratoForm_{{ $prato->id }}" method="POST" action="{{ route('estoque.destroy', ['tipo' => 'prato', 'id' => $prato->id]) }}" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
+    @endforeach
+    @foreach($bebidas as $bebida)
+        <form id="deleteBebidaForm_{{ $bebida->id }}" method="POST" action="{{ route('estoque.destroy', ['tipo' => 'bebida', 'id' => $bebida->id]) }}" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
+    @endforeach
 
     <div class="row mt-4">
         <div class="col-12">
@@ -197,62 +202,80 @@
     </div>
 
     <!-- Modal de Novo Produto -->
-    <div class="modal fade" id="novoProdutoModal" tabindex="-1" aria-labelledby="novoProdutoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="novoProdutoModal" tabindex="-1" aria-labelledby="novoProdutoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="{{ route('estoque.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('estoque.store') }}" method="POST" enctype="multipart/form-data" id="modalFormEstoque">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="novoProdutoModalLabel">Adicionar Novo Produto</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" id="formErrors" role="alert">
+                                <strong>Erros na validação:</strong>
+                                <ul class="mb-0 mt-2">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                            </div>
+                        @endif
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="tipo" class="form-label">Tipo</label>
-                                <select id="tipo" name="tipo" class="form-select" required>
+                                <select id="tipo" name="tipo" class="form-select @error('tipo') is-invalid @enderror" required>
                                     <option value="">Selecione</option>
-                                    <option value="prato">Prato</option>
-                                    <option value="bebida">Bebida</option>
+                                    <option value="prato" {{ old('tipo') == 'prato' ? 'selected' : '' }}>Prato</option>
+                                    <option value="bebida" {{ old('tipo') == 'bebida' ? 'selected' : '' }}>Bebida</option>
                                 </select>
+                                @error('tipo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label for="nome" class="form-label">Nome</label>
-                                <input id="nome" name="nome" class="form-control" type="text" required>
+                                <input id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" type="text" value="{{ old('nome') }}" required>
+                                @error('nome')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="descricao" class="form-label">Descrição</label>
-                                <textarea id="descricao" name="descricao" class="form-control" rows="2"></textarea>
+                                <textarea id="descricao" name="descricao" class="form-control @error('descricao') is-invalid @enderror" rows="2">{{ old('descricao') }}</textarea>
+                                @error('descricao')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label for="preco" class="form-label">Preço</label>
-                                <input id="preco" name="preco" class="form-control" type="number" step="0.01" min="0" required>
+                                <input id="preco" name="preco" class="form-control @error('preco') is-invalid @enderror" type="number" step="0.01" min="0" value="{{ old('preco') }}" required>
+                                @error('preco')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label for="estoque" class="form-label">Estoque</label>
-                                <input id="estoque" name="estoque" class="form-control" type="number" min="0" value="0" required>
+                                <input id="estoque" name="estoque" class="form-control @error('estoque') is-invalid @enderror" type="number" min="0" value="{{ old('estoque', 0) }}" required>
+                                @error('estoque')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="categoria" class="form-label">Categoria</label>
-                                <select id="categoria" name="categoria_id" class="form-select" required>
+                                <select id="categoria" name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
                                     <option value="">Selecione um tipo primeiro</option>
                                 </select>
+                                @error('categoria_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="imagem" class="form-label">Foto do Produto</label>
-                                <input id="imagem" name="imagem" class="form-control" type="file" accept="image/*">
+                                <input id="imagem" name="imagem" class="form-control @error('imagem') is-invalid @enderror" type="file" accept="image/*">
+                                @error('imagem')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Pré-visualização</label>
@@ -279,27 +302,93 @@
         const categoriaSelect = document.getElementById('categoria');
         const imagemInput = document.getElementById('imagem');
         const previewImagem = document.getElementById('previewImagem');
+        const novoProdutoModal = document.getElementById('novoProdutoModal');
+        const modalForm = document.getElementById('modalFormEstoque');
 
-        tipoSelect.addEventListener('change', function () {
+        let modalInstance = null;
+        let modalIsShown = false;
+
+        // Função para carregar categorias
+        function carregarCategorias(tipo, categoriaId = null) {
             categoriaSelect.innerHTML = '<option value="">Selecione</option>';
 
-            if (this.value === 'prato') {
+            if (tipo === 'prato') {
                 categoriasPratos.forEach(c => {
                     const option = document.createElement('option');
                     option.value = c.id;
                     option.text = c.nome;
+                    if (categoriaId && c.id == categoriaId) option.selected = true;
                     categoriaSelect.appendChild(option);
                 });
-            } else if (this.value === 'bebida') {
+            } else if (tipo === 'bebida') {
                 categoriasBebidas.forEach(c => {
                     const option = document.createElement('option');
                     option.value = c.id;
                     option.text = c.nome;
+                    if (categoriaId && c.id == categoriaId) option.selected = true;
                     categoriaSelect.appendChild(option);
                 });
             } else {
                 categoriaSelect.innerHTML = '<option value="">Selecione um tipo primeiro</option>';
             }
+        }
+
+        // Inicializar modal
+        function abrirModal() {
+            if (!modalIsShown) {
+                if (!modalInstance) {
+                    modalInstance = new bootstrap.Modal(novoProdutoModal);
+                }
+                modalInstance.show();
+                modalIsShown = true;
+            }
+        }
+
+        // Fechar modal
+        function fecharModal() {
+            if (modalInstance) {
+                modalInstance.hide();
+                modalIsShown = false;
+            }
+        }
+
+        // Manter modal aberto se houver erros
+        @if ($errors->any())
+            // Aguardar DOM estar pronto
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    abrirModal();
+                    
+                    // Carregar categorias com o tipo selecionado
+                    const tipoSelecionado = tipoSelect.value;
+                    const categoriaSelecionada = '{{ old('categoria_id') }}';
+                    if (tipoSelecionado) {
+                        carregarCategorias(tipoSelecionado, categoriaSelecionada);
+                    }
+                });
+            } else {
+                abrirModal();
+                
+                // Carregar categorias com o tipo selecionado
+                const tipoSelecionado = tipoSelect.value;
+                const categoriaSelecionada = '{{ old('categoria_id') }}';
+                if (tipoSelecionado) {
+                    carregarCategorias(tipoSelecionado, categoriaSelecionada);
+                }
+            }
+        @endif
+
+        // Eventos do modal
+        novoProdutoModal.addEventListener('hidden.bs.modal', function() {
+            modalIsShown = false;
+        });
+
+        novoProdutoModal.addEventListener('shown.bs.modal', function() {
+            modalIsShown = true;
+        });
+
+        tipoSelect.addEventListener('change', function () {
+            carregarCategorias(this.value);
         });
 
         imagemInput.addEventListener('change', function () {
@@ -316,6 +405,14 @@
                 previewImagem.style.display = 'block';
             };
             reader.readAsDataURL(file);
+        });
+
+        // Evento para limpar erros ao reenviar
+        modalForm.addEventListener('submit', function(e) {
+            const errorAlert = document.getElementById('formErrors');
+            if (errorAlert) {
+                errorAlert.remove();
+            }
         });
     </script>
 </div>

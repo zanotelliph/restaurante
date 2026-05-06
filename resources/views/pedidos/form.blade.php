@@ -1,10 +1,16 @@
-@extends('layout')
+﻿@extends('layout')
 
 @section('conteudo')
 
-<h2 class="mb-4 text-2xl font-bold text-gray-700">
-👤 {{ isset($pedido) ? 'Editar Pedido' : 'Novo Pedido' }}
-</h2>
+<div class="page-header">
+    <div>
+        <h1>{{ isset($pedido) ? 'Editar Pedido' : 'Novo Pedido' }}</h1>
+        <p class="text-muted">{{ isset($pedido) ? 'Atualize os detalhes do pedido.' : 'Cadastre um novo pedido para o cliente.' }}</p>
+    </div>
+    <div class="action-bar">
+        <a href="{{ route('pedido.index') }}" class="btn btn-secondary">← Voltar</a>
+    </div>
+</div>
 
 <form id="formPedido" method="POST" class="card p-4">
     @csrf
@@ -42,66 +48,62 @@
     </div>
 
     @if(!isset($pedido))
-    <!-- ADICIONAR ITENS DO PEDIDO -->
     <div class="mt-5">
         <h4>🍽️ Adicionar Itens</h4>
-        
-        <div id="itemsContainer" class="mb-4">
-            <!-- Items será adicionado aqui -->
-        </div>
-
+        <div id="itemsContainer" class="mb-4"></div>
         <button type="button" class="btn btn-info me-2" onclick="adicionarPrato()">+ Prato</button>
         <button type="button" class="btn btn-info" onclick="adicionarBebida()">+ Bebida</button>
     </div>
 
     <div id="tabelaItens" class="mt-4" style="display:none;">
-        <table class="table table-striped table-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>Tipo</th>
-                    <th>Item</th>
-                    <th>Quantidade</th>
-                    <th>Preço Unit.</th>
-                    <th>Subtotal</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="bodyItens">
-            </tbody>
-        </table>
-        <div class="alert alert-primary">
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Item</th>
+                        <th>Quantidade</th>
+                        <th>Preço Unit.</th>
+                        <th>Subtotal</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyItens"></tbody>
+            </table>
+        </div>
+        <div class="alert alert-info">
             <strong>Total do Pedido:</strong> R$ <span id="totalPedido">0.00</span>
         </div>
     </div>
     @else
-    <!-- VISUALIZAR ITENS DO PEDIDO EXISTENTE -->
     <div class="mt-5">
         <h4>📋 Itens do Pedido</h4>
-        <table class="table table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Tipo</th>
-                    <th>Item</th>
-                    <th>Quantidade</th>
-                    <th>Preço Unit.</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($pedido->itens as $item)
-                <tr>
-                    <td>{{ $item->prato_id ? 'Prato' : 'Bebida' }}</td>
-                    <td>{{ $item->prato?->nome ?? $item->bebida?->nome }}</td>
-                    <td>{{ $item->quantidade }}</td>
-                    <td>R$ {{ number_format($item->preco_unitario, 2, ',', '.') }}</td>
-                    <td>R$ {{ number_format($item->quantidade * $item->preco_unitario, 2, ',', '.') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="alert alert-primary">
-            <strong>Total:</strong> R$ {{ number_format($pedido->total, 2, ',', '.') }}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Item</th>
+                        <th>Quantidade</th>
+                        <th>Preço Unit.</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pedido->itens as $item)
+                    <tr>
+                        <td>{{ $item->prato_id ? 'Prato' : 'Bebida' }}</td>
+                        <td>{{ $item->prato?->nome ?? $item->bebida?->nome }}</td>
+                        <td>{{ $item->quantidade }}</td>
+                        <td>R$ {{ number_format($item->preco_unitario, 2, ',', '.') }}</td>
+                        <td>R$ {{ number_format($item->quantidade * $item->preco_unitario, 2, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+        <div class="alert alert-info">
+            <strong>Total:</strong> R$ {{ number_format($pedido->total, 2, ',', '.') }}</div>
     </div>
     @endif
 
@@ -121,7 +123,6 @@
 @if(!isset($pedido))
 <script>
 let itemIndex = 0;
-const itens = [];
 
 function adicionarPrato() {
     const select = `
@@ -151,7 +152,6 @@ function adicionarPrato() {
         </div>
     </div>
     `;
-    
     document.getElementById('itemsContainer').innerHTML += select;
     itemIndex++;
     atualizarTabela();
@@ -185,9 +185,8 @@ function adicionarBebida() {
         </div>
     </div>
     `;
-    
     document.getElementById('itemsContainer').innerHTML += select;
-   itemIndex++;
+    itemIndex++;
     atualizarTabela();
 }
 
@@ -200,18 +199,16 @@ function atualizarTabela() {
     const items = document.querySelectorAll('.item-card');
     const tbody = document.getElementById('bodyItens');
     const tabelaDiv = document.getElementById('tabelaItens');
-    const formPedido = document.getElementById('formPedido');
-    
-    tbody.innerHTML = '';
+    tbody.innerHTML = ''; 
     let total = 0;
     let temItens = false;
-    
+
     items.forEach(item => {
         const selectPrato = item.querySelector('.select-prato');
         const selectBebida = item.querySelector('.select-bebida');
         const select = selectPrato || selectBebida;
         const quantidade = parseInt(item.querySelector('.input-quantidade').value);
-        
+
         if (select && select.value) {
             temItens = true;
             const option = select.options[select.selectedIndex];
@@ -220,78 +217,68 @@ function atualizarTabela() {
             const tipo = selectPrato ? 'Prato' : 'Bebida';
             const subtotal = preco * quantidade;
             total += subtotal;
-            
-            const row = `
-            <tr>
-                <td>${tipo}</td>
-                <td>${nome}</td>
-                <td>${quantidade}</td>
-                <td>R$ ${preco.toFixed(2).replace('.', ',')}</td>
-                <td>R$ ${subtotal.toFixed(2).replace('.', ',')}</td>
-            </tr>
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${tipo}</td>
+                    <td>${nome}</td>
+                    <td>${quantidade}</td>
+                    <td>R$ ${preco.toFixed(2).replace('.', ',')}</td>
+                    <td>R$ ${subtotal.toFixed(2).replace('.', ',')}</td>
+                </tr>
             `;
-            tbody.innerHTML += row;
-            
-            // Adicionar input hidden para o form
-            const tipo_val = selectPrato ? 'prato' : 'bebida';
-            const id_val = select.value;
         }
     });
-    
+
     tabelaDiv.style.display = temItens ? 'block' : 'none';
     document.getElementById('totalPedido').textContent = total.toFixed(2).replace('.', ',');
-    
-    // Habilitar/desabilitar botão submit
     document.querySelector('button[type="submit"]').disabled = !temItens;
 }
 
-// Gerar inputs hidden antes de submeter
 document.getElementById('formPedido').addEventListener('submit', function(e) {
     const items = document.querySelectorAll('.item-card');
-    let hasError = false;
     let itemCount = 0;
-    
-    items.forEach((item, idx) => {
+
+    items.forEach(item => {
         const selectPrato = item.querySelector('.select-prato');
         const selectBebida = item.querySelector('.select-bebida');
         const select = selectPrato || selectBebida;
         const quantidade = item.querySelector('.input-quantidade').value;
-        
+
         if (select && select.value) {
             const option = select.options[select.selectedIndex];
             const tipo = selectPrato ? 'prato' : 'bebida';
             const id_val = select.value;
             const preco = option.dataset.preco;
-            
+
             const input1 = document.createElement('input');
             input1.type = 'hidden';
             input1.name = `itens[${itemCount}][tipo]`;
             input1.value = tipo;
-            
+
             const input2 = document.createElement('input');
             input2.type = 'hidden';
             input2.name = `itens[${itemCount}][id]`;
             input2.value = id_val;
-            
+
             const input3 = document.createElement('input');
             input3.type = 'hidden';
             input3.name = `itens[${itemCount}][quantidade]`;
             input3.value = quantidade;
-            
+
             const input4 = document.createElement('input');
             input4.type = 'hidden';
             input4.name = `itens[${itemCount}][preco]`;
             input4.value = preco;
-            
+
             this.appendChild(input1);
             this.appendChild(input2);
             this.appendChild(input3);
             this.appendChild(input4);
-            
             itemCount++;
         }
     });
-    
+
     if (itemCount === 0) {
         e.preventDefault();
         alert('Adicione pelo menos um item ao pedido!');

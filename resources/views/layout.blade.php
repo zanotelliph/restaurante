@@ -119,6 +119,33 @@ html, body {
     box-shadow: 0 12px 40px rgba(0, 102, 204, 0.15);
 }
 
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1,
+.page-header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #556b88;
+    margin-bottom: 0;
+}
+
+.action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 /* Títulos */
 h1, h2, h3, h4, h5, h6 {
     color: var(--dark-blue);
@@ -424,6 +451,14 @@ h1, h2, h3, h4, h5, h6 {
 <a class="nav-link {{ request()->is('pratos') ? 'active' : '' }}" href="/pratos">Pratos</a>
 
 <a class="nav-link {{ request()->is('pedido') ? 'active' : '' }}" href="/pedido">Pedidos</a>
+
+<a class="nav-link {{ request()->is('graficos*') ? 'active' : '' }}" href="{{ route('grafico.clientes-pedidos') }}">📊 Gráficos</a>
+
+<a class="nav-link {{ request()->is('relatorios*') ? 'active' : '' }}" href="{{ route('relatorio.pedidos') }}">📄 Relatórios</a>
+
+<a class="nav-link {{ request()->is('reserva*') ? 'active' : '' }}" href="/reserva">Reservas</a>
+
+<a class="nav-link {{ request()->is('pagamento*') ? 'active' : '' }}" href="/pagamento">Pagamentos</a>
 
 <a class="nav-link {{ request()->is('estoque') ? 'active' : '' }}" href="/estoque">Estoque</a>
 

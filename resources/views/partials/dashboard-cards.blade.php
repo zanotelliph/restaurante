@@ -48,6 +48,66 @@
         <div class="card dashboard-card h-100">
             <div class="card-body text-center">
                 <div class="icon-box mb-3">
+                    <i class="fas fa-calendar-check" style="font-size: 2.5rem; color: #6610f2;"></i>
+                </div>
+                <h5 class="card-title text-uppercase fw-bold">Reservas</h5>
+                <p class="display-5 fw-bold" style="color: #6610f2;">{{ $reservasCount ?? 0 }}</p>
+                <a href="{{ route('reserva.index') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-arrow-right"></i> Acessar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="icon-box mb-3">
+                    <i class="fas fa-credit-card" style="font-size: 2.5rem; color: #6610f2;"></i>
+                </div>
+                <h5 class="card-title text-uppercase fw-bold">Pagamentos</h5>
+                <p class="display-5 fw-bold" style="color: #6610f2;">{{ $pagamentosCount ?? 0 }}</p>
+                <a href="{{ route('pagamento.index') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-arrow-right"></i> Acessar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="icon-box mb-3">
+                    <i class="fas fa-chart-bar" style="font-size: 2.5rem; color: #6610f2;"></i>
+                </div>
+                <h5 class="card-title text-uppercase fw-bold">Gráficos</h5>
+                <p class="display-5 fw-bold" style="color: #6610f2;">📊</p>
+                <a href="{{ route('grafico.clientes-pedidos') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-arrow-right"></i> Acessar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="icon-box mb-3">
+                    <i class="fas fa-file-alt" style="font-size: 2.5rem; color: #20c997;"></i>
+                </div>
+                <h5 class="card-title text-uppercase fw-bold">Relatórios</h5>
+                <p class="display-5 fw-bold" style="color: #20c997;">📄</p>
+                <a href="{{ route('relatorio.pedidos') }}" class="btn btn-sm btn-success">
+                    <i class="fas fa-arrow-right"></i> Acessar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body text-center">
+                <div class="icon-box mb-3">
                     <i class="fas fa-home" style="font-size: 2.5rem; color: #ffc107;"></i>
                 </div>
                 <h5 class="card-title text-uppercase fw-bold">Dashboard</h5>

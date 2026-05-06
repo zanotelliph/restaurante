@@ -2,33 +2,24 @@
 
 namespace App\Models;
 
-use App\Models\Pagamento;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Pedido extends Model
+class Reserva extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'cliente_id',
-        'total',
+        'data_reserva',
+        'hora_reserva',
+        'pessoas',
         'status',
-        'observacoes'
+        'observacoes',
     ];
 
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
-    }
-
-    public function itens()
-    {
-        return $this->hasMany(PedidoItem::class);
-    }
-
-    public function pagamento()
-    {
-        return $this->hasOne(Pagamento::class);
     }
 }

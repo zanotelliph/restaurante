@@ -9,40 +9,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card dashboard-card bg-light">
-                <div class="card-body">
-                    <h2>👥</h2>
-                    <h3 class="card-title">Clientes</h3>
-                    <p class="card-text display-6">{{ $clientesCount }}</p>
-                    <a href="{{ route('cliente.index') }}" class="btn btn-primary">Gerenciar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card dashboard-card bg-light">
-                <div class="card-body">
-                    <h2>📋</h2>
-                    <h3 class="card-title">Pedidos</h3>
-                    <p class="card-text display-6">{{ $pedidosCount }}</p>
-                    <a href="{{ route('pedido.index') }}" class="btn btn-primary">Gerenciar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card dashboard-card bg-light">
-                <div class="card-body">
-                    <h2>📦</h2>
-                    <h3 class="card-title">Estoque</h3>
-                    <p class="card-text display-6">{{ $estoqueCount }}</p>
-                    <a href="{{ route('estoque.index') }}" class="btn btn-primary">Gerenciar</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row mt-5">
         <div class="col-12">
@@ -58,4 +24,26 @@
         </div>
     </div>
 </div>
+
+<style>
+.icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(102, 126, 234, 0.12);
+    border: 1px solid rgba(102, 126, 234, 0.18);
+    margin: 0 auto 1rem auto;
+}
+
+.dashboard-card .card-body.text-center {
+    padding: 2rem 1.5rem;
+}
+
+.dashboard-card .btn-sm {
+    min-width: 140px;
+}
+</style>
 @endsection
