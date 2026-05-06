@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Prato;
 use App\Models\Bebida;
-use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 
 class EstoqueController extends Controller
 {
-    use DashboardData;
 
     public function index(Request $request)
     {
@@ -132,5 +130,16 @@ class EstoqueController extends Controller
         }
 
         return redirect()->route('estoque.index')->with('success', $message);
+    }
+
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
     }
 }

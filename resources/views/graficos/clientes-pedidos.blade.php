@@ -114,7 +114,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>📊 Gráfico de Barras</h1>
+        <h1> Gráfico de Barras</h1>
         <p class="subtitle">Quantidade de Pedidos por Cliente (Top 10)</p>
 
         <div class="chart-wrapper">

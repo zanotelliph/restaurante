@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Pagamento;
 use App\Models\Pedido;
-use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PagamentoController extends Controller
 {
-    use DashboardData;
 
     public function index(Request $request)
     {
@@ -92,6 +90,17 @@ class PagamentoController extends Controller
         $pagamento->delete();
 
         return redirect()->route('pagamento.index')->with('success', 'Pagamento deletado com sucesso!');
+    }
+
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
     }
 }
 

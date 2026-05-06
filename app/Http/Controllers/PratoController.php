@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prato;
-use App\Traits\DashboardData;
 
 class PratoController extends Controller
 {
-    use DashboardData;
 
     public function index()
     {
@@ -65,4 +63,14 @@ class PratoController extends Controller
         return view('pratos.index', compact('pratos'));
     }
 
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
+    }
 }

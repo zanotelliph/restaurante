@@ -144,7 +144,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🍰 Gráfico de Pizza</h1>
+        <h1> Gráfico de Pizza</h1>
         <p class="subtitle">Distribuição de Pratos por Categoria</p>
 
         <div class="chart-wrapper">

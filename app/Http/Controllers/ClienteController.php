@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    use DashboardData;
 
     public function index(Request $request)
     {
@@ -105,5 +103,16 @@ class ClienteController extends Controller
         $cliente->delete();
 
         return redirect()->route('cliente.index')->with('success', 'Cliente deletado com sucesso!');
+    }
+
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
     }
 }

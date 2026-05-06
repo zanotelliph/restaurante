@@ -8,11 +8,10 @@ use App\Models\PedidoItem;
 use App\Models\Cliente;
 use App\Models\Prato;
 use App\Models\Bebida;
-use App\Traits\DashboardData;
+
 
 class PedidoController extends Controller
 {
-    use DashboardData;
     
     public function index(Request $request)
     {
@@ -120,5 +119,16 @@ class PedidoController extends Controller
         })->with('cliente', 'itens.prato', 'itens.bebida')->get();
 
         return view('pedidos.index', compact('pedidos'));
+    }
+
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
     }
 }

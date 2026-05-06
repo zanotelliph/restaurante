@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Reserva;
 use App\Models\Cliente;
-use App\Traits\DashboardData;
 use Illuminate\Http\Request;
 
 class ReservaController extends Controller
 {
-    use DashboardData;
 
     public function index(Request $request)
     {
@@ -81,6 +79,17 @@ class ReservaController extends Controller
         $reserva->delete();
 
         return redirect()->route('reserva.index')->with('success', 'Reserva deletada com sucesso!');
+    }
+
+    protected function getDashboardData()
+    {
+        return [
+            'clientesCount' => \App\Models\Cliente::count(),
+            'pedidosCount' => \App\Models\Pedido::count(),
+            'reservasCount' => \App\Models\Reserva::count(),
+            'pagamentosCount' => \App\Models\Pagamento::count(),
+            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        ];
     }
 }
 

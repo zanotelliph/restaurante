@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class GraficoController extends Controller
 {
-    // Gráfico 1: Quantidade de pedidos por cliente (Gráfico de Barras)
     public function graficoClientePedidos()
     {
         $data = DB::table('pedidos')
             ->join('clientes', 'pedidos.cliente_id', '=', 'clientes.id')
             ->select(
-                'clientes.nome',
+                'clientes.nome', 
                 DB::raw('COUNT(pedidos.id) as quantidade')
             )
             ->groupBy('clientes.id', 'clientes.nome')
@@ -24,13 +23,12 @@ class GraficoController extends Controller
             ->limit(10)
             ->get();
 
-        $labels = $data->pluck('nome')->toArray();
+        $labels = $data->pluck('nome')->toArray(); 
         $valores = $data->pluck('quantidade')->toArray();
 
         return view('graficos.clientes-pedidos', compact('labels', 'valores'));
     }
 
-    // Gráfico 2: Distribuição de pratos por categoria (Gráfico de Pizza/Donut)
     public function graficoPratosPorCategoria()
     {
         $data = DB::table('pratos')
@@ -44,8 +42,6 @@ class GraficoController extends Controller
 
         $labels = $data->pluck('categoria')->toArray();
         $valores = $data->pluck('quantidade')->toArray();
-
-        // Cores para o gráfico de pizza
         $cores = [
             'rgba(255, 99, 132, 0.7)',
             'rgba(54, 162, 235, 0.7)',
