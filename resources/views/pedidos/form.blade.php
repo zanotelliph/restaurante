@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<form id="formPedido" method="POST" class="card p-4">
+<form id="formPedido" action="{{ isset($pedido) ? route('pedido.update', $pedido->id) : route('pedido.store') }}" method="POST" class="card p-4">
     @csrf
     @if(isset($pedido))
         @method('PUT')
