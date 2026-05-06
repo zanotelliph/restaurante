@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 
 class BebidaController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request) // lê os dados da requisição, como parâmetros de busca 
     {
-        $query = Bebida::with('categoriaBebida');//solicita só as bebidas
+        $query = Bebida::with('categoriaBebida');//solicita só as bebidas junto com a categoria relacionada
 
-        if ($request->has('search') && !empty($request->search)) { //vazio ou similares
+        if ($request->has('search') && !empty($request->search)) { 
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nome', 'LIKE', "%{$search}%")
                   ->orWhere('descricao', 'LIKE', "%{$search}%")
-                  ->orWhereHas('categoriaBebida', function($categoriaQuery) use ($search) { 
+                  ->orWhereHas('categoriaBebida', function($categoriaQuery) use ($search) { //verifica se a categoria relacionada tem o nome que corresponde à busca
                       $categoriaQuery->where('nome', 'LIKE', "%{$search}%");
                   });
             });
@@ -36,21 +36,21 @@ class BebidaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
+            'nome' => 'required|string|max:255', 
+            'descricao' => 'nullable|string', 
             'preco' => 'required|numeric|min:0',
             'categoria_bebida_id' => 'required|exists:categorias_bebidas,id',
             'estoque' => 'required|integer|min:0',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->all(); 
 
-        if ($request->hasFile('imagem')) {
-            $imagem = $request->file('imagem');
+        if ($request->hasFile('imagem')) { 
+            $imagem = $request->file('imagem'); 
             $nomeImagem = time() . '_bebida_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
             $imagem->move(public_path('uploads/bebidas'), $nomeImagem);// pasta
-            $data['imagem'] = 'uploads/bebidas/' . $nomeImagem;// caminho
+            $data['imagem'] = 'uploads/bebidas/' . $nomeImagem;// caminho do banco de dados
         }
 
         Bebida::create($data);
@@ -78,13 +78,13 @@ class BebidaController extends Controller
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->all(); 
 
         if ($request->hasFile('imagem')) {
             if ($bebida->imagem && file_exists(public_path($bebida->imagem))) {
-                unlink(public_path($bebida->imagem));
+                unlink(public_path($bebida->imagem)); 
             }
-            $imagem = $request->file('imagem');
+            $imagem = $request->file('imagem'); 
             $nomeImagem = time() . '_bebida_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
             $imagem->move(public_path('uploads/bebidas'), $nomeImagem);
             $data['imagem'] = 'uploads/bebidas/' . $nomeImagem;
@@ -99,11 +99,11 @@ class BebidaController extends Controller
     {
         $bebida = Bebida::findOrFail($id);
         
-        if ($bebida->imagem && file_exists(public_path($bebida->imagem))) {
-            unlink(public_path($bebida->imagem));
+        if ($bebida->imagem && file_exists(public_path($bebida->imagem))) { 
+            unlink(public_path($bebida->imagem)); 
         }
         
-        $bebida->delete();
+        $bebida->delete();  
 
         return redirect()->route('bebida.index')->with('success', 'Bebida deletada com sucesso!');
     }
