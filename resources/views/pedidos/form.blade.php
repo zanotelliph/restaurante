@@ -1,18 +1,63 @@
-﻿@extends('layout')
+﻿@extends('form-layout')
 
 @section('conteudo')
 
-<div class="page-header">
-    <div>
-        <h1>{{ isset($pedido) ? 'Editar Pedido' : 'Novo Pedido' }}</h1>
-        <p class="text-muted">{{ isset($pedido) ? 'Atualize os detalhes do pedido.' : 'Cadastre um novo pedido para o cliente.' }}</p>
-    </div>
-    <div class="action-bar">
-        <a href="{{ route('pedido.index') }}" class="btn btn-secondary">← Voltar</a>
-    </div>
-</div>
+<style>
+    .fullscreen-form-container {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 150px);
+        background: #fff;
+        margin: -20px;
+    }
+    .form-header {
+        background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+        color: white;
+        padding: 30px;
+        border-bottom: 3px solid #0099FF;
+    }
+    .form-header h1 {
+        margin: 0 0 5px 0;
+        font-size: 2rem;
+    }
+    .form-header p {
+        margin: 0;
+        opacity: 0.9;
+    }
+    .form-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 30px;
+    }
+    .form-actions {
+        padding: 20px 30px;
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        display: flex;
+        gap: 10px;
+        position: sticky;
+        bottom: 0;
+    }
+    .form-actions .btn {
+        min-width: 120px;
+        font-size: 1rem;
+        padding: 0.5rem 1.5rem;
+    }
+</style>
 
-<form id="formPedido" action="{{ isset($pedido) ? route('pedido.update', $pedido->id) : route('pedido.store') }}" method="POST" class="card p-4">
+<div class="fullscreen-form-container">
+    <div class="form-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1>{{ isset($pedido) ? '✏️ Editar Pedido' : '➕ Novo Pedido' }}</h1>
+                <p>{{ isset($pedido) ? 'Atualize os detalhes do pedido.' : 'Cadastre um novo pedido para o cliente.' }}</p>
+            </div>
+            <a href="{{ route('pedido.index') }}" class="btn btn-light">← Voltar</a>
+        </div>
+    </div>
+
+    <div class="form-content">
+        <form id="formPedido" action="{{ isset($pedido) ? route('pedido.update', $pedido->id) : route('pedido.store') }}" method="POST">
     @csrf
     @if(isset($pedido))
         @method('PUT')
@@ -112,13 +157,22 @@
         <textarea class="form-control" id="observacoes" name="observacoes" rows="3">{{ $pedido->observacoes ?? '' }}</textarea>
     </div>
 
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary" @if(!isset($pedido) && false) disabled @endif>
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary btn-lg" @if(!isset($pedido) && false) disabled @endif>
             {{ isset($pedido) ? 'Atualizar' : 'Criar Pedido' }}
         </button>
-        <a href="{{ route('pedido.index') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ route('pedido.index') }}" class="btn btn-secondary btn-lg">Cancelar</a>
     </div>
-</form>
+        </form>
+    </div>
+
+    <div class="form-actions">
+        <div style="display: flex; gap: 10px; width: 100%; justify-content: flex-start;">
+            <button type="submit" form="formPedido" class="btn btn-primary btn-lg">✓ {{ isset($pedido) ? 'Atualizar' : 'Criar' }}</button>
+            <a href="{{ route('pedido.index') }}" class="btn btn-secondary btn-lg">← Cancelar</a>
+        </div>
+    </div>
+</div>
 
 @if(!isset($pedido))
 <script>

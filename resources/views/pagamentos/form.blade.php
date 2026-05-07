@@ -1,19 +1,63 @@
-@extends('layout')
+@extends('form-layout')
 
 @section('conteudo')
-<div class="page-header mb-4 d-flex justify-content-between align-items-center">
-    <div>
-        <h1>{{ isset($pagamento) ? 'Editar Pagamento' : 'Novo Pagamento' }}</h1>
-        <p class="text-muted">{{ isset($pagamento) ? 'Atualize os dados de pagamento.' : 'Registre um pagamento para um pedido.' }}</p>
-    </div>
-    <div>
-        <a href="{{ route('pagamento.index') }}" class="btn btn-secondary">← Voltar</a>
-    </div>
-</div>
 
-<div class="card">
-    <div class="card-body">
-        <form action="{{ isset($pagamento) ? route('pagamento.update', $pagamento->id) : route('pagamento.store') }}" method="POST">
+<style>
+    .fullscreen-form-container {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 150px);
+        background: #fff;
+        margin: -20px;
+    }
+    .form-header {
+        background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+        color: white;
+        padding: 30px;
+        border-bottom: 3px solid #0099FF;
+    }
+    .form-header h1 {
+        margin: 0 0 5px 0;
+        font-size: 2rem;
+    }
+    .form-header p {
+        margin: 0;
+        opacity: 0.9;
+    }
+    .form-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 30px;
+    }
+    .form-actions {
+        padding: 20px 30px;
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        display: flex;
+        gap: 10px;
+        position: sticky;
+        bottom: 0;
+    }
+    .form-actions .btn {
+        min-width: 120px;
+        font-size: 1rem;
+        padding: 0.5rem 1.5rem;
+    }
+</style>
+
+<div class="fullscreen-form-container">
+    <div class="form-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1>{{ isset($pagamento) ? '✏️ Editar Pagamento' : '➕ Novo Pagamento' }}</h1>
+                <p>{{ isset($pagamento) ? 'Atualize os dados de pagamento.' : 'Registre um pagamento para um pedido.' }}</p>
+            </div>
+            <a href="{{ route('pagamento.index') }}" class="btn btn-light">← Voltar</a>
+        </div>
+    </div>
+
+    <div class="form-content">
+        <form id="pagamentosForm" action="{{ isset($pagamento) ? route('pagamento.update', $pagamento->id) : route('pagamento.store') }}" method="POST">
             @csrf
             @if(isset($pagamento))
                 @method('PUT')
@@ -73,11 +117,18 @@
                 <textarea id="observacoes" name="observacoes" rows="3" class="form-control">{{ old('observacoes', $pagamento->observacoes ?? '') }}</textarea>
             </div>
 
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">{{ isset($pagamento) ? 'Atualizar' : 'Salvar Pagamento' }}</button>
-                <a href="{{ route('pagamento.index') }}" class="btn btn-secondary">Cancelar</a>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">{{ isset($pagamento) ? 'Atualizar' : 'Salvar Pagamento' }}</button>
+                <a href="{{ route('pagamento.index') }}" class="btn btn-secondary btn-lg">Cancelar</a>
             </div>
         </form>
+    </div>
+
+    <div class="form-actions">
+        <div style="display: flex; gap: 10px; width: 100%; justify-content: flex-start;">
+            <button type="submit" form="pagamentosForm" class="btn btn-primary btn-lg">✓ {{ isset($pagamento) ? 'Atualizar' : 'Salvar' }}</button>
+            <a href="{{ route('pagamento.index') }}" class="btn btn-secondary btn-lg">← Cancelar</a>
+        </div>
     </div>
 </div>
 @endsection

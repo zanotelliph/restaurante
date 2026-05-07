@@ -7,7 +7,7 @@
             <h1>Controle de Estoque</h1>
         </div>
         <div class="col-md-4 text-end">
-            <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#novoProdutoModal">Adicionar Produto</button>
+            <a href="{{ route('estoque.create') }}" class="btn btn-primary me-2">Adicionar Produto</a>
             <button type="submit" form="estoqueForm" class="btn btn-success">Salvar Alterações</button>
         </div>
     </div>
