@@ -436,7 +436,7 @@ h1, h2, h3, h4, h5, h6 {
 <div class="container">
 
 <a class="navbar-brand" href="/" title="{{ config('restaurant.tagline') }}">
-🍽 {{ config('restaurant.name') }}
+ {{ config('restaurant.name') }}
 </a>
 
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -451,10 +451,6 @@ h1, h2, h3, h4, h5, h6 {
 <a class="nav-link {{ request()->is('pratos') ? 'active' : '' }}" href="/pratos">Pratos</a>
 
 <a class="nav-link {{ request()->is('pedido') ? 'active' : '' }}" href="/pedido">Pedidos</a>
-
-<a class="nav-link {{ request()->is('graficos*') ? 'active' : '' }}" href="{{ route('grafico.clientes-pedidos') }}">📊 Gráficos</a>
-
-<a class="nav-link {{ request()->is('relatorios*') ? 'active' : '' }}" href="{{ route('relatorio.pedidos') }}">📄 Relatórios</a>
 
 <a class="nav-link {{ request()->is('reserva*') ? 'active' : '' }}" href="/reserva">Reservas</a>
 

@@ -64,3 +64,5 @@
 </div>
 
 @endsection
+
+<a href="{{ route('prato.report') }}" class="btn btn-danger">Baixar PDF</a>

@@ -13,8 +13,8 @@
                 <a class="nav-link {{ request()->routeIs('cliente.*') ? 'active' : '' }}" href="{{ route('cliente.index') }}">Clientes</a>
                 <a class="nav-link {{ request()->routeIs('prato.*') ? 'active' : '' }}" href="{{ route('prato.index') }}">Pratos</a>
                 <a class="nav-link {{ request()->routeIs('pedido.*') ? 'active' : '' }}" href="{{ route('pedido.index') }}">Pedidos</a>
-                <a class="nav-link {{ request()->routeIs('estoque.*') ? 'active' : '' }}" href="{{ route('estoque.index') }}">Estoque</a>
             </div>
         </div>
     </div>
 </nav>
+

@@ -1,17 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\PagamentoController;
-use App\Http\Controllers\GraficoController;
-use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\PratoController;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use App\Charts\ClientesPedidos;
+use App\Charts\PratosCategoria;
+
+
+
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard', [
@@ -19,7 +26,9 @@ Route::get('/dashboard', function () {
         'pedidosCount' => \App\Models\Pedido::count(),
         'reservasCount' => \App\Models\Reserva::count(),
         'pagamentosCount' => \App\Models\Pagamento::count(),
-        'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+        'estoqueCount' =>
+            \App\Models\Prato::where('estoque', '>', 0)->count()
+            + \App\Models\Bebida::where('estoque', '>', 0)->count(),
     ]);
 })->name('dashboard');
 
@@ -30,6 +39,9 @@ Route::get('/cliente/edit/{id}', [ClienteController::class, 'edit'])->name('clie
 Route::put('/cliente/{id}', [ClienteController::class, 'update'])->name('cliente.update');
 Route::delete('/cliente/{id}', [ClienteController::class, 'destroy'])->name('cliente.destroy');
 
+Route::get('/clientes/chart', [ClienteController::class, 'chart'])
+    ->name('cliente.chart');
+
 Route::get('/pedido', [PedidoController::class, 'index'])->name('pedido.index');
 Route::get('/pedido/create', [PedidoController::class, 'create'])->name('pedido.create');
 Route::post('/pedido', [PedidoController::class, 'store'])->name('pedido.store');
@@ -38,12 +50,14 @@ Route::get('/pedido/edit/{id}', [PedidoController::class, 'edit'])->name('pedido
 Route::put('/pedido/{id}', [PedidoController::class, 'update'])->name('pedido.update');
 Route::delete('/pedido/{id}', [PedidoController::class, 'destroy'])->name('pedido.destroy');
 
+
 Route::get('/reserva', [ReservaController::class, 'index'])->name('reserva.index');
 Route::get('/reserva/create', [ReservaController::class, 'create'])->name('reserva.create');
 Route::post('/reserva', [ReservaController::class, 'store'])->name('reserva.store');
 Route::get('/reserva/edit/{id}', [ReservaController::class, 'edit'])->name('reserva.edit');
 Route::put('/reserva/{id}', [ReservaController::class, 'update'])->name('reserva.update');
 Route::delete('/reserva/{id}', [ReservaController::class, 'destroy'])->name('reserva.destroy');
+
 
 Route::get('/pagamento', [PagamentoController::class, 'index'])->name('pagamento.index');
 Route::get('/pagamento/create', [PagamentoController::class, 'create'])->name('pagamento.create');
@@ -52,18 +66,29 @@ Route::get('/pagamento/edit/{id}', [PagamentoController::class, 'edit'])->name('
 Route::put('/pagamento/{id}', [PagamentoController::class, 'update'])->name('pagamento.update');
 Route::delete('/pagamento/{id}', [PagamentoController::class, 'destroy'])->name('pagamento.destroy');
 
+
 Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-Route::delete('/estoque/{tipo}/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
+Route::get('/estoque/create', [EstoqueController::class, 'create'])->name('estoque.create');
 Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
 Route::put('/estoque', [EstoqueController::class, 'updateEstoque'])->name('estoque.update');
 Route::patch('/estoque', [EstoqueController::class, 'updateEstoque']);
+Route::delete('/estoque/{tipo}/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
 
-// Rotas de Gráficos
-Route::get('/graficos/clientes-pedidos', [GraficoController::class, 'graficoClientePedidos'])->name('grafico.clientes-pedidos');
-Route::get('/graficos/pratos-categoria', [GraficoController::class, 'graficoPratosPorCategoria'])->name('grafico.pratos-categoria');
+Route::get('/graficos/clientes-pedidos', function () {
+    $chart = (new ClientesPedidos(app(LarapexChart::class)))->build();
+    return view('cliente.ClientesChart', compact('chart'));
+})->name('grafico.clientes-pedidos');
 
-// Rotas de Relatórios
-Route::get('/relatorios/pedidos', [RelatorioController::class, 'viewRelatorioPedidos'])->name('relatorio.pedidos');
-Route::get('/relatorios/pedidos/pdf', [RelatorioController::class, 'relatorioPedidos'])->name('relatorio.pedidos.pdf');
-Route::get('/relatorios/clientes', [RelatorioController::class, 'viewRelatorioClientes'])->name('relatorio.clientes');
-Route::get('/relatorios/clientes/pdf', [RelatorioController::class, 'relatorioClientes'])->name('relatorio.clientes.pdf');
+Route::get('/graficos/pratos-categoria', function () {
+    $chart = (new PratosCategoria(app(LarapexChart::class)))->build();
+    return view('pratos.PratosChart', compact('chart'));
+})->name('grafico.pratos-categoria');
+
+
+
+
+Route::get('/clientes/report', [ClienteController::class, 'report'])->name('cliente.report');
+
+Route::get('/pratos/report', [PratoController::class, 'report'])->name('prato.report');
+
+Route::view('/relatorios', 'relatorios.index')->name('relatorios.index');

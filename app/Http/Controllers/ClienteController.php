@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Charts\ClientesPedidos;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ClienteController extends Controller
 {
@@ -11,7 +15,7 @@ class ClienteController extends Controller
     public function index(Request $request)
     {
         $query = Cliente::query();
-//filtros para fazer pesquisa 
+
       
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
@@ -22,8 +26,8 @@ class ClienteController extends Controller
             });
         }
 
-        $clientes = $query->paginate(12);//pagina entre
-        return view('clientes.index', array_merge(compact('clientes'), $this->getDashboardData()));
+        $clientes = $query->paginate(12);
+        return view('cliente.index', array_merge(compact('clientes'), $this->getDashboardData()));
     }
 
     public function create()
@@ -104,6 +108,26 @@ class ClienteController extends Controller
 
         return redirect()->route('cliente.index')->with('success', 'Cliente deletado com sucesso!');
     }
+    
+    public function chart(ClientesPedidos $chart)
+{
+    return view('clientes.chart', [
+        'chart' => $chart->build()
+    ]);
+}
+    public function report()
+{
+    $clientes = \App\Models\Cliente::orderBy('id')->get();
+
+    $data = [
+        'titulo' => 'Relatório de Clientes',
+        'clientes' => $clientes,
+    ];
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('cliente.report', $data);
+
+    return $pdf->download('relatorio_clientes.pdf');
+}
 
     protected function getDashboardData()
     {

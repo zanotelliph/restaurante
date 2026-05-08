@@ -3,64 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prato;
+use Illuminate\Http\Request;
+use App\Charts\PratosCategoria;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PratoController extends Controller
 {
-
     public function index()
     {
         $pratos = Prato::all();
 
-        return view('pratos.index', array_merge(['pratos' => $pratos], $this->getDashboardData()));
+        return view('pratos.index', array_merge([
+            'pratos' => $pratos
+        ], $this->getDashboardData()));
     }
-       public function create()
+
+    public function create()
     {
-        return view('prato.form', $this->getDashboardData());
+        return view('pratos.form', $this->getDashboardData());
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nome' => 'required',
-            'email' => 'required',
-            'telefone' => 'required',
+            'preco' => 'required',
+            'descricao' => 'nullable',
+            'estoque' => 'required',
+            'categoria_prato_id' => 'required'
         ]);
 
-        prato::create($request->all());
+        Prato::create($request->all());
 
-        return redirect('prato');
+        return redirect('pratos');
     }
 
     public function edit($id)
     {
-        $prato = prato::find($id);
-        return view('prato.form', compact('prato'));
+        $prato = Prato::find($id);
+
+        return view('pratos.form', compact('prato'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nome' => 'required',
-            'email' => 'required',
-            'telefone' => 'required',
-        ]);
+        Prato::find($id)->update($request->all());
 
-        prato::find($id)->update($request->all());
-
-        return redirect('prato');
+        return redirect('pratos');
     }
 
     public function destroy($id)
     {
-        prato::destroy($id);
-        return redirect('prato');
+        Prato::destroy($id);
+
+        return redirect('pratos');
     }
 
     public function search(Request $request)
     {
-        $pratos = prato::where('nome', 'like', '%' . $request->valor . '%')->get();
+        $pratos = Prato::where('nome', 'like', '%' . $request->valor . '%')->get();
 
         return view('pratos.index', compact('pratos'));
+    }
+
+    public function chart(PratosCategoria $chart)
+    {
+        return view('pratos.PratosChart', [
+            'chart' => $chart->build()
+        ]);
     }
 
     protected function getDashboardData()
@@ -70,7 +80,9 @@ class PratoController extends Controller
             'pedidosCount' => \App\Models\Pedido::count(),
             'reservasCount' => \App\Models\Reserva::count(),
             'pagamentosCount' => \App\Models\Pagamento::count(),
-            'estoqueCount' => \App\Models\Prato::where('estoque', '>', 0)->count() + \App\Models\Bebida::where('estoque', '>', 0)->count(),
+            'estoqueCount' =>
+                \App\Models\Prato::where('estoque', '>', 0)->count()
+                + \App\Models\Bebida::where('estoque', '>', 0)->count(),
         ];
     }
 }

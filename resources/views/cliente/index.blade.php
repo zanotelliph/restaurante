@@ -86,3 +86,5 @@
 </div>
 
 @endsection
+
+<a href="{{ route('cliente.report') }}" class="btn btn-danger">Baixar PDF</a>

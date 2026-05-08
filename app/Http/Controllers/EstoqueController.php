@@ -28,6 +28,10 @@ class EstoqueController extends Controller
 
         return view('estoque.index', array_merge(compact('pratos', 'bebidas', 'categoriasPratos', 'categoriasBebidas', 'search'), $this->getDashboardData()));
     }
+    public function create()
+{
+    return view('estoque.form', $this->getDashboardData());
+}
 
     public function store(Request $request)
     {
@@ -48,6 +52,7 @@ class EstoqueController extends Controller
 
         if ($validated['tipo'] === 'prato') {
             $request->validate(['categoria_id' => 'exists:categorias_pratos,id']);
+            
 
             Prato::create([
                 'nome' => $validated['nome'],
@@ -73,6 +78,7 @@ class EstoqueController extends Controller
         }
 
         return redirect()->route('estoque.index')->with('success', 'Produto adicionado com sucesso!');
+        
     }
 
     public function updateEstoque(Request $request)

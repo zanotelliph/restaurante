@@ -97,7 +97,7 @@
                 </div>
                 <h5 class="card-title text-uppercase fw-bold">Relatórios</h5>
                 <p class="display-5 fw-bold" style="color: #20c997;">📄</p>
-                <a href="{{ route('relatorio.pedidos') }}" class="btn btn-sm btn-success">
+                <a href="{{ route('relatorios.index') }}" class="btn btn-sm btn-primary">
                     <i class="fas fa-arrow-right"></i> Acessar
                 </a>
             </div>
