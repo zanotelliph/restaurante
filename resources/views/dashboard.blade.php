@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-md-4 mb-4">
-            <div class="card dashboard-card bg-light">
+            <div class="card    -card bg-light">
                 <div class="card-body">
                     <h2></h2>
                     <h3 class="card-title">Clientes</h3>
@@ -76,9 +76,8 @@
                     <h3 class="card-title">Gr√°ficos</h3>
                     <p class="text-muted small">Visualize an√°lises e estat√≠sticas</p>
                     <div class="btn-group w-100" role="group">
-                        {{ dd(route('grafico.pratos-categoria')) }}" class="btn btn-outline-primary btn-sm">Barras</a>
-                       {{ dd(route('grafico.pratos-categoria'))  }}" class="btn btn-sm btn-primary"><i class="fas fa-arrow-right"></i> Acessar
-</a>
+                        <a href="{{ route('grafico.clientes-pedidos') }}" class="btn btn-outline-primary btn-sm">Clientes</a>
+                        <a href="{{ route('grafico.pratos-categoria') }}" class="btn btn-primary btn-sm">Pratos</a>
                     </div>
                 </div>
             </div>
@@ -123,8 +122,3 @@
     </div>
 </div>
 @endsection
-
-<div class="d-grid gap-2">
-<a href="{{ route('grafico.clientes-pedidos') }}" class="btn btn-primary">Gr·fico Clientes</a>
-<a href="{{ route('grafico.pratos-categoria') }}" class="btn btn-warning">Gr·fico Pratos</a>
-</div>

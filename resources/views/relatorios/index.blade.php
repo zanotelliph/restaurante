@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Relatórios</title>
+    <title>Relatï¿½rios</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -16,7 +16,7 @@
 
         <div class="card-body text-center">
 
-            <h1 class="mb-4">?? Relatórios</h1>
+            <h1 class="mb-4">?? Relatï¿½rios</h1>
 
             <div class="d-flex justify-content-center gap-3">
 
@@ -28,6 +28,12 @@
                     PDF Pratos
                 </a>
 
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary">
+                    Voltar ao Dashboard
+                </a>
             </div>
 
         </div>

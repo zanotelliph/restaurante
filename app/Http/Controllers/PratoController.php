@@ -73,6 +73,20 @@ class PratoController extends Controller
         ]);
     }
 
+    public function report()
+    {
+        $pratos = Prato::orderBy('id')->get();
+
+        $data = [
+            'titulo' => 'Relatório de Pratos',
+            'pratos' => $pratos,
+        ];
+
+        $pdf = Pdf::loadView('pratos.report', $data);
+
+        return $pdf->download('relatorio_pratos.pdf');
+    }
+
     protected function getDashboardData()
     {
         return [
